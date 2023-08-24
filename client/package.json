@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://namhels.github.io/MusicalBox_ts_nest_next_react_redax/",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
