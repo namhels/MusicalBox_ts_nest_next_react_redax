@@ -1,19 +1,31 @@
 import React from "react"
 import SpaIcon from '@mui/icons-material/Spa';
-import Navbar from "@/components/Navbar";
+import MainLayout from "@/layouts/MainLayout";
 
 const Index = () => {
   return (
     <>
-      <Navbar/>
-      <div className="center">
-        <h1>Welcome
-          <SpaIcon color="primary" fontSize="large" />
-        </h1>
-        <h3>
-          here are the best tracks
-        </h3>
-      </div>
+      <MainLayout>
+        <div className="center">
+          <h1>Welcome
+            <SpaIcon color="primary" fontSize="large" />
+          </h1>
+          <h3>
+            Here are the best tracks
+          </h3>
+        </div>
+      </MainLayout>
+      {/* <MainLayout>
+        <div className="center">
+          <h1>Welcome
+            <SpaIcon color="primary" fontSize="large" />
+          </h1>
+          <h3>
+            Here are the best tracks
+          </h3>
+        </div>
+      </MainLayout> */}
+
       <style jsx>
         {`
           .center {
