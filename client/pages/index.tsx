@@ -15,17 +15,6 @@ const Index = () => {
           </h3>
         </div>
       </MainLayout>
-      {/* <MainLayout>
-        <div className="center">
-          <h1>Welcome
-            <SpaIcon color="primary" fontSize="large" />
-          </h1>
-          <h3>
-            Here are the best tracks
-          </h3>
-        </div>
-      </MainLayout> */}
-
       <style jsx>
         {`
           .center {
