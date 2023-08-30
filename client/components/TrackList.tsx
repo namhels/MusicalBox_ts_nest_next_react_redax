@@ -1,7 +1,6 @@
 import React from 'react';
 import {ITrack} from "../types/track";
 import {Box, Grid} from '@mui/material';
-// import {Book} from '@mui/icons-material';
 import TrackItem from "./TrackItem";
 
 interface TrackListProps {

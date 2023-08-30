@@ -1,0 +1,20 @@
+.track {
+  display: flex;
+  align-items: center;
+  margin: 20px;
+  padding: 10px;
+}
+
+.nameArtist {
+  width: 200px;
+  margin: 0 20px;
+}
+
+.artist {
+  font-size: 12;
+  color: gray;
+}
+
+.iconDelete {
+  margin-left: auto;
+}
