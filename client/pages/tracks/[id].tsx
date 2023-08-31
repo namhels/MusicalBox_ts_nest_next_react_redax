@@ -46,8 +46,12 @@ const TrackPage = () => {
           fullWidth
           multiline
           rows={4}
+          style={{marginTop: 10}}
         />
-        <Button>Send</Button>
+        <Button
+          style={{ fontSize: 22, marginTop: 10 }}
+          variant={"outlined"}>Send
+        </Button>
       </Grid>
       <div>
         {track.comments.map(comment =>
