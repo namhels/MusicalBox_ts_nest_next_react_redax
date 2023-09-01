@@ -11,18 +11,30 @@ import { useActions } from '@/hooks/useActions';
 let audio: any;
 
 const Player = () => {
-  const track: ITrack = { _id: "1", name: "Track 1", artist: "DDT", text: "kjlkjsdaas", listens: 5, audio: "http://localhost:5000/src/audio/Mika.mp3", picture: "https://dictionary.cambridge.org/ru/images/thumb/poster_noun_002_28550.jpg?version=5.0.333", comments: [] };
-
   const { pause, volume, active, currentTime, duration } = useTypedSelector(state => state.player);
-  const { pauseTrack, playTrack } = useActions();
+  const { pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack } = useActions();
 
   useEffect(() => {
     if (!audio) {
       audio = new Audio()
-      audio.src = track.audio
+    } else {
+      setAudio()
+      play()
     }
-  }, [track.audio])
+  }, [active])
 
+  const setAudio = () => {
+    if (active) {
+      audio.src = active.audio
+      audio.volume = volume / 100
+      audio.onloadedmetadata = () => {
+        setDuration(Math.ceil(audio.duration))
+      }
+      audio.ontimeupdate = () => {
+        setCurrentTime(Math.ceil(audio.currentTime))
+      }
+    }
+  }
 
   const play = () => {
     if (pause) {
@@ -34,6 +46,20 @@ const Player = () => {
     }
   };
 
+  const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+    audio.volume = Number(e.target.value) / 100
+    setVolume(Number(e.target.value))
+  }
+
+  const changeCurrentTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    audio.currentTime = Number(e.target.value)
+    setCurrentTime(Number(e.target.value))
+  }
+
+  if (!active) {
+    return null
+  }
+
   return (
     <div className={s.player}>
       <IconButton onClick={play}>
@@ -43,12 +69,12 @@ const Player = () => {
           }
       </IconButton>
       <Grid className={styles.nameArtist} container direction="column">
-          <div>{track.name}</div>
-          <div className={styles.artist}>{track.artist}</div>
+          <div>{active?.name}</div>
+          <div className={styles.artist}>{active?.artist}</div>
       </Grid>
-      <TrackProgress left={0} right={100} onChange={() => { }} />
+      <TrackProgress left={currentTime} right={duration} onChange={changeCurrentTime} />
       <VolumeUp style={{ marginLeft: 'auto' }} />
-      <TrackProgress left={0} right={100} onChange={() => { }} />
+      <TrackProgress left={volume} right={100} onChange={changeVolume} />
     </div>
   )
 }
