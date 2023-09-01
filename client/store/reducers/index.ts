@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import { playerReducer } from "./playerReducer";
 import { HYDRATE } from "next-redux-wrapper";
 
-export const rootReducer = combineReducers({
+const rootReducer = combineReducers({
   player: playerReducer
 })
 
