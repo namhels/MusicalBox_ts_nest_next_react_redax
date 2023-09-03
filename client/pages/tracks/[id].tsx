@@ -1,15 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ITrack } from '@/types/track';
 import MainLayout from '@/layouts/MainLayout';
 import { Button, Grid, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
+import {GetServerSideProps} from "next";
+import axios from "axios";
+import { useInput } from '@/hooks/useInput';
 
-const TrackPage = () => {
+const TrackPage = ({ serverTrack }: any) => {
+  const [track, setTrack] = useState<ITrack>(serverTrack);
   const router = useRouter();
-  const track: ITrack = { _id: "1", name: "Track 1", artist: "DDT", text: "kjlkjsdaas", listens: 5, audio: "http://localhost:5000/audio/3495.mp3", picture: "https://dictionary.cambridge.org/ru/images/thumb/poster_noun_002_28550.jpg?version=5.0.333", comments: [] };
+  const username = useInput('')
+  const text = useInput('')
+
+  const addComment = async () => {
+        try {
+            const response = await axios.post('http://localhost:5000/tracks/comment', {
+                username: username.value,
+                text: text.value,
+                trackId: track._id
+            })
+            setTrack({...track, comments: [...track.comments, response.data]})
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
   return (
-    <MainLayout>
+    <MainLayout
+            title={"Musical Box - " + track.name + " - " + track.artist}
+            keywords={'Music, artists, ' + track.name + ", " + track.artist}
+        >
       <Button
         style={{ fontSize: 32, marginBottom: 15 }}
         variant={"outlined"}
@@ -22,7 +43,7 @@ const TrackPage = () => {
         style={{margin: '20px 0'}}
       >
         <img
-          src={track.picture}
+          src={'http://localhost:5000/' + track.picture}
           alt='poster'
           width={200}
           height={200}
@@ -40,17 +61,21 @@ const TrackPage = () => {
         <TextField
           label="Your name"
           fullWidth
+          {...username}
         />
         <TextField
           label="Comment"
           fullWidth
           multiline
           rows={4}
-          style={{marginTop: 10}}
+          style={{ marginTop: 10 }}
+          {...text}
         />
         <Button
+          onClick={addComment}
           style={{ fontSize: 22, marginTop: 10 }}
-          variant={"outlined"}>Send
+          variant={"outlined"}
+        >Send
         </Button>
       </Grid>
       <div>
@@ -66,3 +91,12 @@ const TrackPage = () => {
 }
 
 export default TrackPage;
+
+export const getServerSideProps: GetServerSideProps = async ({params}) => {
+    const response = await axios.get('http://localhost:5000/tracks/' + params?.id)
+    return {
+        props: {
+            serverTrack: response.data
+        }
+    }
+}
