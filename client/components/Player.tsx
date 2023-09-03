@@ -1,9 +1,8 @@
 import React, {useEffect} from 'react';
 import { Pause, PlayArrow, VolumeUp } from '@mui/icons-material';
 import { Grid, IconButton } from '@mui/material';
-import { ITrack } from '@/types/track';
-import s from '../styles/Player.module.scss'
-import styles from '../styles/TrackItem.module.scss'
+import s from '../styles/Player.module.scss';
+import styles from '../styles/TrackItem.module.scss';
 import TrackProgress from './TrackProgress';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
 import { useActions } from '@/hooks/useActions';
@@ -25,7 +24,7 @@ const Player = () => {
 
   const setAudio = () => {
     if (active) {
-      audio.src = active.audio
+      audio.src = 'http://localhost:5000/' + active.audio
       audio.volume = volume / 100
       audio.onloadedmetadata = () => {
         setDuration(Math.ceil(audio.duration))

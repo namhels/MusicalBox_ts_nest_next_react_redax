@@ -1,18 +1,37 @@
 import React, { useState } from 'react';
 import StepWrapper from '@/components/StepWrapper';
 import MainLayout from '@/layouts/MainLayout';
-import { Button, Grid } from '@mui/material';
-import TrackInfo from '@/components/TrackInfo';
+import { Button, Grid, TextField } from '@mui/material';
 import FileUpload from '@/components/FileUpload';
+import { useInput } from '@/hooks/useInput';
+import axios from 'axios';
+import {useRouter} from "next/router";
 
 const Create = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [picture, setPicture] = useState(null);
-  const [audio, setAudio] = useState(null);
+  const [picture, setPicture] = useState("");
+  const [audio, setAudio] = useState("");
+  const name = useInput('');
+  const artist = useInput('');
+  const text = useInput('');
+  const router = useRouter();
 
   const next = () => {
-    setActiveStep(prev => prev + 1);
+    if (activeStep !== 2) {
+        setActiveStep(prev => prev + 1)
+    } else {
+        const formData = new FormData()
+        formData.append('name', name.value)
+        formData.append('text', text.value)
+        formData.append('artist', artist.value)
+        formData.append('picture', picture)
+        formData.append('audio', audio)
+        axios.post('http://localhost:5000/tracks', formData)
+            .then(resp => router.push('/tracks'))
+            .catch(e => console.log(e))
+    }
   }
+
   const back = () => {
     setActiveStep(prev => prev - 1);
   }
@@ -21,7 +40,29 @@ const Create = () => {
     <MainLayout>
       <StepWrapper activeStep={activeStep}>
         {activeStep === 0 &&
-          <TrackInfo/>
+          <Grid
+            container
+            direction={"column"}
+            style={{padding: 20}}
+          >
+            <TextField
+              {...name}
+              style={{marginTop: 10}}
+              label={"Track name"}
+            />
+            <TextField
+              {...artist}
+              style={{marginTop: 10}}
+              label={"Singer or band name"}
+            />
+            <TextField
+              {...text}
+              style={{marginTop: 10}}
+              label={"Track words"}
+              multiline
+              rows={3}
+            />
+          </Grid>
         }
         {activeStep === 1 &&
           <FileUpload

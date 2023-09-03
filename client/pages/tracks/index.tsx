@@ -1,10 +1,10 @@
-import React from 'react'
-import MainLayout from '@/layouts/MainLayout'
+import React from 'react';
+import MainLayout from '@/layouts/MainLayout';
 import { Card, Grid, Button, Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import TrackList from '@/components/TrackList';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
-import { wrapper } from '@/store';
+import { NextThunkDispatch, wrapper } from '@/store';
 import { fetchTracks } from '@/store/actions-creators/track';
 
 
@@ -37,12 +37,14 @@ const Index = () => {
 
 export default Index;
 
-// export const getServerSideProps = wrapper.getServerSideProps(store => ({req, res, ...etc}) => {
-//   console.log('2. Page.getServerSideProps uses the store to dispatch things');
-//   store.dispatch({type: 'TICK', payload: 'was set in other page'});
-// });
+export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
+  const dispatch = store.dispatch as NextThunkDispatch;
+  await dispatch(await fetchTracks());
+  return {
+    props: {},
+  };
+});
 
-// export const getServerSideProps = wrapper.getServerSideProps(() => {})
 
 // export const getServerSideProps = wrapper.getServerSideProps(async ({store}) => {
 //     const dispatch = store.dispatch as NextThunkDispatch
