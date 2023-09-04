@@ -17,4 +17,4 @@ import * as path from 'path';
     FileModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
